@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MORAN CREATIVE — 결을 담아 짓는 이야기와 그림</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<style>
+  :root{
+    --paper: #E9E1CB;
+    --paper-deep: #DED2AF;
+    --paper-line: rgba(28,26,23,0.14);
+    --ink: #1C1A17;
+    --ink-soft: #58513f;
+    --ink-faint: #8c8467;
+    --vermilion: #A63626;
+    --gold: #A87B12;
+    --gold-wash: #EFE3C4;
+    --ob-blue:#1F4E79;
+    --ob-red:#AE3A34;
+    --ob-yellow:#C9A227;
+    --ob-white:#F5F1E6;
+    --ob-black:#1C1A17;
+    --art-wash: #E2DCCB;
+    --serif: 'Noto Serif KR', serif;
+    --sans: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    --maxw: 1120px;
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+
+  /* paper grain overlay */
+  .grain{
+    position:fixed; inset:0; pointer-events:none; z-index:5;
+    opacity:0.05; mix-blend-mode:multiply;
+  }
+
+  a{ color:inherit; }
+  ::selection{ background:var(--vermilion); color:var(--paper); }
+
+  :focus-visible{
+    outline:2px solid var(--vermilion);
+    outline-offset:3px;
+  }
+
+  .wrap{ max-width:var(--maxw); margin:0 auto; padding:0 28px; }
+
+  /* ---------- NAV ---------- */
+  header.nav{
+    position:fixed; top:0; left:0; right:0; z-index:50;
+    background:linear-gradient(to bottom, rgba(233,225,203,0.96), rgba(233,225,203,0.7) 80%, transparent);
+    padding:22px 0 34px;
+    transition:background .3s ease;
+  }
+  .nav .wrap{ display:flex; align-items:center; justify-content:space-between; }
+  .brandmark{
+    display:flex; align-items:center; gap:10px;
+    font-family:var(--sans); font-weight:800; letter-spacing:0.18em;
+    font-size:14px; text-decoration:none; color:var(--ink);
+  }
+  .brandmark .dot{
+    width:7px;height:7px;border-radius:50%;background:var(--vermilion);
+    display:inline-block;
+  }
+  .nav-links{ display:flex; gap:22px; list-style:none; margin:0; padding:0; flex-wrap:wrap; justify-content:flex-end; }
+  .nav-links a{
+    font-size:11px; letter-spacing:0.06em; text-decoration:none;
+    color:var(--ink-soft); padding-bottom:3px; border-bottom:1px solid transparent;
+    transition:border-color .2s, color .2s; white-space:nowrap;
+  }
+  .nav-links a:hover{ color:var(--ink); border-color:var(--ink); }
+  .nav-toggle{ display:none; background:none; border:none; font-size:22px; color:var(--ink); }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    min-height:100svh;
+    display:flex; flex-direction:column; justify-content:center;
+    position:relative;
+    padding:140px 0 80px;
+  }
+  .hero .wrap{ position:relative; z-index:2; }
+  .eyebrow{
+    font-family:var(--sans); font-weight:600; font-size:12px;
+    letter-spacing:0.32em; color:var(--vermilion); text-transform:uppercase;
+    margin:0 0 22px;
+  }
+  .hero h1{
+    font-family:var(--serif); font-weight:900;
+    font-size:clamp(40px, 7vw, 84px);
+    line-height:1.08; margin:0 0 20px; letter-spacing:-0.01em;
+  }
+  .hero .sub{
+    font-family:var(--serif); font-weight:400; font-style:italic;
+    color:var(--ink-soft); font-size:clamp(16px,2.2vw,21px);
+    margin:0 0 46px; max-width:520px;
+  }
+  .hero .lede{
+    font-size:16px; line-height:1.9; color:var(--ink-soft);
+    max-width:480px; margin:0;
+  }
+
+  /* signature ink-line art: mountain + sun, asymmetric */
+  .signature-art{
+    position:absolute; right:2%; top:50%; transform:translateY(-46%);
+    width:min(52vw, 620px); z-index:1; pointer-events:none;
+  }
+  .signature-art svg{ width:100%; height:auto; display:block; }
+  .signature-art path{
+    fill:none; stroke:var(--ink); stroke-width:2.4;
+    stroke-linecap:round; stroke-linejoin:round;
+    stroke-dasharray:1400; stroke-dashoffset:1400;
+    animation:draw 2.6s 0.4s cubic-bezier(.2,.7,.2,1) forwards;
+  }
+  .signature-art circle{
+    fill:var(--vermilion); opacity:0;
+    animation:appear .6s 2.5s ease forwards;
+  }
+  @keyframes draw{ to{ stroke-dashoffset:0; } }
+  @keyframes appear{ to{ opacity:1; } }
+
+  .scroll-cue{
+    position:absolute; left:28px; bottom:34px;
+    font-size:11px; letter-spacing:0.24em; color:var(--ink-faint);
+    display:flex; align-items:center; gap:10px;
+  }
+  .scroll-cue::after{
+    content:''; width:1px; height:34px; background:var(--ink-faint);
+    display:block; animation:pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes pulse{ 0%,100%{opacity:.3} 50%{opacity:1} }
+
+  /* ---------- brush divider ---------- */
+  .brush-divider{ width:100%; height:46px; display:block; margin-top:-1px; }
+
+  /* ---------- ABOUT / INTRO ---------- */
+  section.about{ padding:100px 0 110px; position:relative; }
+  .about .wrap{ max-width:720px; }
+  .about p{
+    font-family:var(--serif); font-size:clamp(19px,2.6vw,25px);
+    line-height:1.85; color:var(--ink); margin:0 0 20px; font-weight:400;
+  }
+  .about .kicker{
+    font-family:var(--sans); font-weight:600; font-size:12px;
+    letter-spacing:0.28em; color:var(--ink-faint); text-transform:uppercase;
+    margin-bottom:26px; display:block;
+  }
+  .about .closing{
+    font-family:var(--sans); font-size:14px; color:var(--vermilion);
+    letter-spacing:0.02em; margin-top:34px; font-weight:600;
+  }
+
+  /* ---------- IMPRINT SECTIONS (shared) ---------- */
+  .imprint{ padding:120px 0; position:relative; overflow:hidden; }
+  .imprint-head{
+    display:flex; flex-direction:column; gap:14px; margin-bottom:64px;
+    max-width:640px;
+  }
+  .imprint-head .eyebrow{ margin:0; }
+  .imprint-head h2{
+    font-family:var(--serif); font-weight:700; font-size:clamp(30px,4.2vw,46px);
+    margin:0; line-height:1.2;
+  }
+  .imprint-head p{
+    font-size:16px; line-height:1.85; color:var(--ink-soft); margin:6px 0 0;
+    max-width:520px;
+  }
+
+  /* ---- PASSNET BOOKS section ---- */
+  .books{ background:var(--gold-wash); }
+  .books::before{
+    content:''; position:absolute; inset:0;
+    background:radial-gradient(ellipse at 85% 0%, rgba(168,123,18,0.14), transparent 60%);
+    pointer-events:none;
+  }
+  .book-list{
+    display:flex; flex-direction:column; border-top:1px solid rgba(28,26,23,0.18);
+  }
+  .book-row{
+    display:grid; grid-template-columns:60px 1fr 1.4fr;
+    align-items:baseline; gap:24px; padding:28px 0;
+    border-bottom:1px solid rgba(28,26,23,0.18);
+    transition:padding-left .25s ease;
+  }
+  .book-row:hover{ padding-left:10px; }
+  .book-num{ font-family:var(--serif); font-size:14px; color:var(--gold); font-weight:700; }
+  .book-title{
+    font-family:var(--serif); font-weight:700; font-size:clamp(19px,2.4vw,25px);
+    margin:0; letter-spacing:-0.01em;
+  }
+  .book-desc{ font-size:14.5px; line-height:1.7; color:var(--ink-soft); margin:0; }
+  .books-cta{ margin-top:48px; display:flex; align-items:center; gap:18px; flex-wrap:wrap; }
+
+  .author-block{
+    margin-top:70px; padding-top:44px; border-top:1px solid rgba(28,26,23,0.18);
+    display:grid; grid-template-columns:140px 1fr; gap:28px; align-items:start;
+  }
+  .author-mark{
+    font-family:var(--serif); font-weight:900; font-size:34px; color:var(--gold);
+  }
+  .author-block h3{ font-family:var(--serif); font-size:18px; margin:0 0 10px; }
+  .author-block p{ font-size:14.5px; line-height:1.8; color:var(--ink-soft); margin:0; max-width:460px; }
+
+  /* ---- 오방산수 section ---- */
+  .art{ background:var(--art-wash); color:var(--ink); }
+  .obang-strip{
+    display:flex; height:6px; width:100%; margin-bottom:60px;
+    border-radius:1px; overflow:hidden;
+  }
+  .obang-strip span{ flex:1; }
+  .obang-strip .b{ background:var(--ob-blue); }
+  .obang-strip .r{ background:var(--ob-red); }
+  .obang-strip .y{ background:var(--ob-yellow); }
+  .obang-strip .w{ background:var(--ob-white); border-left:1px solid rgba(0,0,0,.08); border-right:1px solid rgba(0,0,0,.08); }
+  .obang-strip .k{ background:var(--ob-black); }
+
+  .art-grid{
+    display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:start;
+  }
+  .art-visual{
+    aspect-ratio:4/5; border:1px solid rgba(28,26,23,0.22);
+    position:relative; overflow:hidden; background:
+      linear-gradient(180deg, rgba(31,78,121,0.10), transparent 40%),
+      linear-gradient(0deg, rgba(174,58,52,0.08), transparent 45%);
+  }
+  .art-visual svg{ width:100%; height:100%; display:block; }
+  .art-copy p{ font-size:15.5px; line-height:1.9; color:var(--ink-soft); margin:0 0 18px; }
+  .ex-block{
+    margin-top:36px; padding:24px 0; border-top:1px solid rgba(28,26,23,0.2); border-bottom:1px solid rgba(28,26,23,0.2);
+  }
+  .ex-block .eyebrow{ margin-bottom:10px; }
+  .ex-block h4{ font-family:var(--serif); font-size:20px; margin:0 0 6px; }
+  .ex-block p{ font-size:14.5px; color:var(--ink-soft); margin:0; }
+
+  .author-block2{ margin-top:50px; }
+  .author-block2 h3{ font-family:var(--serif); font-size:18px; margin:0 0 12px; }
+  .author-block2 p{ font-size:14.5px; line-height:1.85; color:var(--ink-soft); margin:0 0 10px; }
+
+  /* ---- CTA buttons ---- */
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:13.5px; font-weight:600; letter-spacing:0.03em;
+    padding:13px 26px; border:1px solid var(--ink); text-decoration:none;
+    color:var(--ink); background:transparent; cursor:pointer;
+    transition:background .2s, color .2s;
+  }
+  .btn:hover{ background:var(--ink); color:var(--paper); }
+  .btn.solid{ background:var(--ink); color:var(--paper); }
+  .btn.solid:hover{ opacity:0.82; background:var(--ink); }
+  .btn::after{ content:'→'; transition:transform .2s; }
+  .btn:hover::after{ transform:translateX(3px); }
+
+  /* ---------- NEWS / NEWSLETTER ---------- */
+  section.news{ padding:110px 0; background:var(--paper); }
+  .news-head{ max-width:560px; margin-bottom:44px; }
+  .news-head h2{ font-family:var(--serif); font-size:clamp(26px,3.6vw,38px); margin:6px 0 0; }
+  .news-empty{
+    border:1px dashed rgba(28,26,23,0.3); padding:36px 30px;
+    font-size:14.5px; color:var(--ink-faint); margin-bottom:56px;
+  }
+  form.subscribe{
+    display:flex; gap:0; max-width:480px; border-bottom:1.5px solid var(--ink);
+    padding-bottom:4px;
+  }
+  form.subscribe input{
+    flex:1; border:none; background:none; font-family:var(--sans);
+    font-size:15px; padding:10px 4px; color:var(--ink); outline:none;
+  }
+  form.subscribe input::placeholder{ color:var(--ink-faint); }
+  form.subscribe button{
+    border:none; background:none; font-family:var(--sans); font-weight:700;
+    font-size:13px; letter-spacing:0.06em; color:var(--ink); cursor:pointer;
+    padding:10px 6px; white-space:nowrap;
+  }
+  .subscribe-note{ font-size:12px; color:var(--ink-faint); margin-top:10px; }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    background:var(--ink); color:var(--paper); padding:70px 0 36px;
+  }
+  .footer-top{
+    display:flex; justify-content:space-between; align-items:flex-start;
+    flex-wrap:wrap; gap:40px; margin-bottom:60px;
+  }
+  .footer-brand{ font-family:var(--serif); font-size:26px; font-weight:700; }
+  .footer-brand .dot{ color:var(--vermilion); }
+  .footer-cols{ display:flex; gap:64px; flex-wrap:wrap; }
+  .footer-col h5{
+    font-size:11px; letter-spacing:0.2em; text-transform:uppercase;
+    color:rgba(233,225,203,0.5); margin:0 0 14px; font-weight:600;
+  }
+  .footer-col a, .footer-col p{
+    display:block; font-size:14px; color:rgba(233,225,203,0.85);
+    text-decoration:none; margin-bottom:9px; line-height:1.6;
+  }
+  .footer-bottom{
+    border-top:1px solid rgba(233,225,203,0.15); padding-top:24px;
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px;
+    font-size:12px; color:rgba(233,225,203,0.45);
+  }
+
+  /* ---------- responsive ---------- */
+  @media (max-width:860px){
+    .nav-links{ display:none; }
+    .signature-art{ width:80vw; opacity:0.55; right:50%; transform:translate(50%,-30%); top:36%; }
+    .hero{ padding-top:120px; }
+    .art-grid{ grid-template-columns:1fr; gap:36px; }
+    .book-row{ grid-template-columns:36px 1fr; }
+    .book-row .book-desc{ grid-column:2/3; }
+    .author-block{ grid-template-columns:1fr; gap:12px; }
+    .footer-top{ flex-direction:column; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .signature-art path, .signature-art circle, .scroll-cue::after{
+      animation:none !important; stroke-dashoffset:0 !important; opacity:1 !important;
+    }
+    html{ scroll-behavior:auto; }
+  }
+</style>
+</head>
+<body>
+
+<svg class="grain" width="0" height="0">
+  <filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/></filter>
+</svg>
+<div class="grain" style="filter:url(#noise)"></div>
+
+<header class="nav">
+  <div class="wrap">
+    <a href="#top" class="brandmark"><span class="dot"></span>MORAN CREATIVE</a>
+    <ul class="nav-links">
+      <li><a href="#about">ABOUT</a></li>
+      <li><a href="#books">PASSNET BOOKS</a></li>
+      <li><a href="obang-sansu.html">OBANG SANSU</a></li>
+      <li><a href="#digital-art">DIGITAL ART</a></li>
+      <li><a href="#exhibition">EXHIBITION</a></li>
+      <li><a href="#goods">GOODS</a></li>
+      <li><a href="#news">NEWS</a></li>
+      <li><a href="#contact">CONTACT</a></li>
+    </ul>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="signature-art" aria-hidden="true">
+      <svg viewBox="0 0 620 420" xmlns="http://www.w3.org/2000/svg">
+        <!-- single-line mountain, one peak, asymmetric -->
+        <path d="M 20 340 C 90 340 110 300 150 230 C 175 188 185 150 205 150 C 222 150 232 185 255 235 C 285 300 300 340 340 340" />
+        <path d="M 340 340 C 380 340 400 315 430 270 C 448 244 458 226 470 226 C 481 226 490 244 508 272 C 528 305 545 340 580 340" />
+        <!-- sun, right side -->
+        <circle cx="520" cy="120" r="7" />
+      </svg>
+    </div>
+
+    <div class="wrap">
+      <p class="eyebrow">MORAN CREATIVE</p>
+      <h1>결을 담아<br>짓는 이야기와 그림</h1>
+      <p class="sub">글과 그림, 두 가지 창작의 결을 담는 곳입니다</p>
+      <p class="lede">삶의 태도를 담은 책을 짓고, 오방의 색으로 산과 물을 그립니다.</p>
+    </div>
+
+    <div class="scroll-cue">SCROLL</div>
+  </section>
+
+  <svg class="brush-divider" viewBox="0 0 1200 46" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,20 C150,5 300,32 480,18 C660,4 780,30 960,16 C1080,7 1150,22 1200,14 L1200,46 L0,46 Z" fill="var(--paper)"/>
+  </svg>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="wrap">
+      <span class="kicker">MORAN CREATIVE는</span>
+      <p>하나의 시선으로 짓고 그리는 곳입니다.<br>글로는 삶을 이야기하고, 그림으로는 자연을 담습니다.</p>
+      <p>서두르지 않되 꾸준히, 완벽하지 않아도 진심을 다해 —<br>그것이 MORAN CREATIVE가 만드는 것들의 태도입니다.</p>
+      <p class="closing">지금은 남선의 글과 그림으로 첫걸음을 시작합니다.</p>
+    </div>
+  </section>
+
+  <!-- PASSNET BOOKS -->
+  <section class="imprint books" id="books">
+    <div class="wrap">
+      <div class="imprint-head">
+        <p class="eyebrow" style="color:var(--gold)">PASSNET BOOKS</p>
+        <h2>저자 남선의<br>에세이 시리즈</h2>
+        <p>완벽하지 않아도 괜찮다는 것을 이야기합니다. 완벽을 좇기보다, 지속 가능한 85퍼센트를 만들어가는 이야기를 담습니다.</p>
+      </div>
+
+      <div class="book-list">
+        <div class="book-row">
+          <span class="book-num">01</span>
+          <h3 class="book-title">85의 법칙</h3>
+          <p class="book-desc">완벽보다 지속 가능한 85퍼센트를 이야기합니다.</p>
+        </div>
+        <div class="book-row">
+          <span class="book-num">02</span>
+          <h3 class="book-title">인생은 게임이다</h3>
+          <p class="book-desc">삶이라는 판 위에서, 게임처럼 가볍게 던지는 질문들.</p>
+        </div>
+        <div class="book-row">
+          <span class="book-num">03</span>
+          <h3 class="book-title">인생은 연극이다</h3>
+          <p class="book-desc">다섯 개의 막으로 풀어낸, 삶이라는 무대 위의 이야기.</p>
+        </div>
+        <div class="book-row">
+          <span class="book-num">04</span>
+          <h3 class="book-title">인생은 허당이다</h3>
+          <p class="book-desc">완벽하지 않아도 괜찮다는 것을, 허당처럼 솔직하게.</p>
+        </div>
+      </div>
+
+      <div class="books-cta">
+        <a class="btn solid" href="#books" style="border-color:var(--gold); background:var(--gold); color:var(--paper);">남선의 책들 보기</a>
+      </div>
+
+      <div class="author-block">
+        <div class="author-mark">南</div>
+        <div>
+          <h3>저자 남선 南鮮 (NAMSEON)</h3>
+          <p>남선은 서화식의 필명이자 호입니다. 알려지기 위한 삶보다 의미 있는 작업 자체에 집중하며, 삶의 여러 순간을 담담하게 글로 풀어내고 있습니다.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 오방산수 -->
+  <section class="imprint art" id="art">
+    <div class="wrap">
+      <div class="obang-strip" aria-hidden="true">
+        <span class="b"></span><span class="r"></span><span class="y"></span><span class="w"></span><span class="k"></span>
+      </div>
+
+      <div class="imprint-head">
+        <p class="eyebrow" style="color:var(--ob-red)">OBANG SANSU · 오방산수</p>
+        <h2>The Art of<br>Korean Five Colors</h2>
+        <p style="font-family:var(--serif); font-style:italic; color:var(--ink-soft); margin-top:4px;">다섯 가지 색으로 그리는 산과 물</p>
+      </div>
+
+      <div class="art-grid">
+        <div class="art-visual" aria-hidden="true">
+          <svg viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 380 C 60 380 90 320 150 260 C 190 220 210 190 240 190 C 268 190 285 225 320 275 C 360 330 380 380 400 380"
+                  fill="none" stroke="var(--ob-black)" stroke-width="2.2" stroke-linecap="round"/>
+            <circle cx="330" cy="110" r="26" fill="var(--ob-red)" opacity="0.85"/>
+          </svg>
+        </div>
+        <div class="art-copy">
+          <p>OBANG SANSU는 한국 전통의 오방색과 산수의 미학을 현대적인 디지털 방식으로 재해석한 창작 브랜드입니다. 절제된 구성과 여백의 미학, 자연의 흐름을 통해 한국적인 아름다움을 세계에 소개합니다.</p>
+          <p>청, 적, 황, 백, 흑 — 오방색으로 그려낸 산수화입니다. 산 하나와 해 또는 달 하나, 절제된 구도 안에 담긴 여백의 미학. 전통의 색과 정서를 오늘의 시선으로 다시 그립니다.</p>
+
+          <div class="ex-block">
+            <p class="eyebrow" style="color:var(--ob-blue)">EX 시리즈</p>
+            <h4>후지산 외전</h4>
+            <p>오방산수의 시선으로 담은 후지산의 사계</p>
+          </div>
+
+          <div class="author-block2">
+            <h3>작가 NAM SEON</h3>
+            <p>산과 물, 해와 달을 오방의 색으로 그리는 작가입니다. 오래전부터 품어온 구상을, 디지털이라는 오늘의 방식으로 풀어내고 있습니다.</p>
+            <p>물감으로 담을지, 색종이를 오려 담을지 오래 고민한 끝에, 디지털이라는 방식으로 그 구상을 실현하고 있습니다. 한 폭의 산수 안에 오방의 색과 여백의 정서를 함께 담아냅니다.</p>
+          </div>
+
+          <a class="btn" href="obang-sansu.html" style="margin-top:8px; border-color:var(--ob-red); color:var(--ob-red);">Gallery 전체 보기</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DIGITAL ART / EXHIBITION / GOODS placeholders -->
+  <section class="imprint" id="digital-art" style="background:var(--paper-deep); padding:90px 0;">
+    <div class="wrap">
+      <div class="imprint-head" style="margin-bottom:0;">
+        <p class="eyebrow">DIGITAL ART</p>
+        <h2 style="font-size:clamp(26px,3.4vw,38px);">OBANG SANSU와 독립된<br>디지털 창작 라인</h2>
+        <p>준비 중입니다. 동일한 디자인 철학(여백·한지 질감·붓의 흐름) 안에서, 오방산수와는 다른 결의 디지털 작업을 선보일 예정입니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="imprint" id="exhibition" style="background:var(--paper); padding:90px 0;">
+    <div class="wrap">
+      <div class="imprint-head" style="margin-bottom:0;">
+        <p class="eyebrow">EXHIBITION</p>
+        <h2 style="font-size:clamp(26px,3.4vw,38px);">전시 이력</h2>
+        <p>아직 등록된 전시 이력이 없습니다. 향후 전시가 확정되는 대로 연도별 아카이브 형태로 채워나갈 예정입니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="imprint" id="goods" style="background:var(--paper-deep); padding:90px 0;">
+    <div class="wrap">
+      <div class="imprint-head" style="margin-bottom:0;">
+        <p class="eyebrow">GOODS</p>
+        <h2 style="font-size:clamp(26px,3.4vw,38px);">굿즈</h2>
+        <p>준비 중입니다. PASSNET BOOKS와 OBANG SANSU의 세계관을 담은 상품을 선보일 예정입니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEWS / NEWSLETTER -->
+  <section class="news" id="news">
+    <div class="wrap">
+      <div class="news-head">
+        <p class="eyebrow">소식</p>
+        <h2>새로운 이야기,<br>새로운 그림</h2>
+      </div>
+      <div class="news-empty">MORAN CREATIVE의 소식을 전해드립니다. 아직 등록된 소식이 없습니다.</div>
+
+      <form class="subscribe" onsubmit="event.preventDefault(); this.querySelector('button').textContent='구독 완료';">
+        <input type="email" placeholder="이메일을 입력해 주세요" required aria-label="이메일 주소">
+        <button type="submit">구독하기</button>
+      </form>
+      <p class="subscribe-note">새로운 책과 그림 소식을 가장 먼저 받아보세요.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer id="contact">
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">MORAN<span class="dot">·</span>CREATIVE</div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h5>임프린트</h5>
+          <a href="#books">PASSNET BOOKS</a>
+          <a href="#art">오방산수</a>
+        </div>
+        <div class="footer-col">
+          <h5>문의</h5>
+          <a href="mailto:kpasscompany@gmail.com">kpasscompany@gmail.com</a>
+        </div>
+        <div class="footer-col">
+          <h5>도메인</h5>
+          <p>morancreative.kr</p>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© MORAN CREATIVE</span>
+      <span>글과 그림을 짓는 크리에이티브 브랜드</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
